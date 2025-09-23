@@ -71,11 +71,9 @@
             </label>
             <div class="flex items-center justify-between">
               <span class="text-sm text-gray-600">(10,000,000 đ / AI Agent)</span>
-
-              <!-- Bộ tăng giảm -->
               <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
                 <button type="button" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-lg font-bold" id="minusBtn">−</button>
-                <input type="number" id="addonQty" value="1" min="1" class="w-12 text-center border-0 focus:ring-0 outline-none" />
+                <input type="number" id="addonQty" value="1" min="1" class="w-12 text-center border-0 focus:ring-0 outline-none" disabled />
                 <button type="button" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-lg font-bold" id="plusBtn">+</button>
               </div>
             </div>
@@ -87,7 +85,7 @@
       <aside class="bg-white rounded-2xl shadow p-6 h-fit">
         <h3 class="font-semibold text-lg mb-4">Chi tiết hóa đơn</h3>
         <div class="space-y-2 text-sm" id="invoice">
-          <!-- Sẽ render bằng JS -->
+          <!-- Render bằng JS -->
         </div>
         <button class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
           Tiếp tục thanh toán
@@ -100,7 +98,7 @@
   </div>
 </section>
 
-<script>
+<script is:client>
   const plans = document.querySelectorAll(".plan");
   const durations = document.querySelectorAll(".duration");
   const addonCheck = document.getElementById("addonCheck");
@@ -122,21 +120,23 @@
       const months = parseInt(duration.value);
       const subTotal = planPrice * months;
       total += subTotal;
-      html += `<div class="flex justify-between"><span>${plan.nextElementSibling.textContent} × ${months} tháng</span><span>${subTotal.toLocaleString()} đ</span></div>`;
+      html += `<div class="flex justify-between"><span>${plan.nextElementSibling.textContent} × ${months} tháng</span><span>${subTotal.toLocaleString("vi-VN")} đ</span></div>`;
     }
 
     if (addonCheck.checked) {
+      addonQty.disabled = false;
       const qty = parseInt(addonQty.value);
       const subTotal = ADDON_PRICE * qty;
       total += subTotal;
-      html += `<div class="flex justify-between"><span>Build Bot AI × ${qty}</span><span>${subTotal.toLocaleString()} đ</span></div>`;
+      html += `<div class="flex justify-between"><span>Build Bot AI × ${qty}</span><span>${subTotal.toLocaleString("vi-VN")} đ</span></div>`;
+    } else {
+      addonQty.disabled = true;
     }
 
-    html += `<div class="flex justify-between font-semibold border-t pt-2"><span>Tổng tiền thanh toán</span><span>${total.toLocaleString()} đ</span></div>`;
+    html += `<div class="flex justify-between font-semibold border-t pt-2"><span>Tổng tiền thanh toán</span><span>${total.toLocaleString("vi-VN")} đ</span></div>`;
     invoiceDiv.innerHTML = html;
   }
 
-  // Event listeners
   plans.forEach(r => r.addEventListener("change", calcInvoice));
   durations.forEach(r => r.addEventListener("change", calcInvoice));
   addonCheck.addEventListener("change", calcInvoice);
@@ -144,6 +144,5 @@
   plusBtn.addEventListener("click", () => { addonQty.stepUp(); calcInvoice(); });
   minusBtn.addEventListener("click", () => { addonQty.stepDown(); calcInvoice(); });
 
-  // Initial render
   calcInvoice();
 </script>
