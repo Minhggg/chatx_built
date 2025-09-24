@@ -21,30 +21,39 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           <div class="bg-white rounded-2xl shadow p-6 space-y-4">
             <h3 class="font-semibold text-lg">Chọn gói</h3>
             <div class="space-y-3">
+              <!-- Gói cá nhân -->
               <label class="flex justify-between items-center border border-gray-400 rounded-lg p-3 cursor-pointer">
-                <div class="flex items-center">
-                  <input type="radio" 
-                         name="plan" 
-                         value="200000" 
-                         data-name="GÓI CÁ NHÂN" 
-                         checked 
-                         class="mr-2 plan" />
-                  <span>200,000 đ/tháng</span>
+                <div class="flex items-center gap-2">
+                  <input 
+                    type="radio" 
+                    name="plan" 
+                    value="200000" 
+                    data-name="Gói Cá Nhân" 
+                    checked 
+                    class="plan"
+                  />
+                  <span class="font-medium">Gói Cá Nhân</span>
                 </div>
+                <span class="font-semibold">200,000 đ/tháng</span>
               </label>
 
+              <!-- Gói doanh nghiệp -->
               <label class="flex justify-between items-center border border-gray-400 rounded-lg p-3 cursor-pointer">
-                <div class="flex items-center">
-                  <input type="radio" 
-                         name="plan" 
-                         value="2369000" 
-                         data-name="GÓI DOANH NGHIỆP" 
-                         class="mr-2 plan" />
-                  <span>2,369,000 đ/tháng</span>
+                <div class="flex items-center gap-2">
+                  <input 
+                    type="radio" 
+                    name="plan" 
+                    value="2369000" 
+                    data-name="Gói Doanh Nghiệp" 
+                    class="plan"
+                  />
+                  <span class="font-medium">Gói Doanh Nghiệp</span>
                 </div>
+                <span class="font-semibold">2,369,000 đ/tháng</span>
               </label>
             </div>
           </div>
+
 
           <!-- Chọn thời hạn -->
           <div class="bg-white rounded-2xl shadow p-6 space-y-4">
@@ -162,12 +171,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         return;
       }
 
-      const planName = plan.dataset.name; // ✅ Lấy tên gói chuẩn
+      const planName = plan.dataset.name;
       const planPrice = parseInt(plan.value);
       const months = parseInt(duration.value);
       let total = planPrice * months;
       if (addon > 0) total += ADDON_PRICE * addon;
 
+      // ✅ Truyền dữ liệu sang trang QR
       const url = `/qr?plan=${encodeURIComponent(planName)}&months=${months}&addon=${addon}&total=${total}`;
       window.location.href = url;
     });

@@ -1,19 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const { searchParams } = Astro.url;
-const plan = searchParams.get("plan") ?? "Không xác định";
-const months = parseInt(searchParams.get("months") ?? "0", 10);
-const addon = parseInt(searchParams.get("addon") ?? "0", 10);
-const total = parseInt(searchParams.get("total") ?? "0", 10);
-
-function formatCurrency(num) {
-  if (isNaN(num)) return "0 đ";
-  return num.toLocaleString("vi-VN") + " đ";
-}
-
-const addonText = addon > 0 ? `${addon} × 10,000,000 đ` : null;
-const transferContent = `Thanh toan ${plan}`;
 ---
 
 <BaseLayout>
@@ -30,39 +16,8 @@ const transferContent = `Thanh toan ${plan}`;
         </div>
 
         <!-- Thông tin -->
-        <div class="space-y-4">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm text-gray-500">Ngân hàng</label>
-              <input type="text" value="MBBank" disabled class="w-full border rounded-lg px-3 py-2 bg-gray-100" />
-            </div>
-            <div>
-              <label class="block text-sm text-gray-500">Số tài khoản</label>
-              <div class="flex items-center">
-                <input type="text" value="2222233666666" disabled class="flex-1 border rounded-lg px-3 py-2 bg-gray-100" />
-                <button class="ml-2 text-blue-600 text-sm" onclick="navigator.clipboard.writeText('2222233666666')">Copy</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm text-gray-500">Số tiền chuyển khoản</label>
-              <input type="text" value={formatCurrency(total)} disabled class="w-full border rounded-lg px-3 py-2 bg-gray-100 font-semibold" />
-            </div>
-            <div>
-              <label class="block text-sm text-gray-500">Nội dung *</label>
-              <div class="flex items-center">
-                <input type="text" value={transferContent} disabled class="flex-1 border rounded-lg px-3 py-2 bg-gray-100" />
-                <button class="ml-2 text-blue-600 text-sm" onclick={`navigator.clipboard.writeText('${transferContent}')`}>Copy</button>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-sm text-gray-500">Chủ tài khoản</label>
-            <input type="text" value="NGUYEN HAI LONG" disabled class="w-full border rounded-lg px-3 py-2 bg-gray-100" />
-          </div>
+        <div id="payment-info" class="space-y-4">
+          <p>Đang tải thông tin thanh toán...</p>
         </div>
 
         <!-- Lưu ý -->
@@ -77,30 +32,87 @@ const transferContent = `Thanh toan ${plan}`;
       </div>
 
       <!-- Cột phải -->
-      <aside class="bg-white rounded-2xl shadow p-6 h-fit">
+      <aside class="bg-white rounded-2xl shadow p-6 h-fit" id="invoice-details">
         <h3 class="font-semibold text-lg mb-4">Chi tiết hóa đơn</h3>
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between">
-            <span>Gói</span>
-            <span>{plan}</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Thời hạn</span>
-            <span>{months} tháng</span>
-          </div>
-          {addonText && (
-            <div class="flex justify-between">
-              <span>Build Bot AI</span>
-              <span>{addonText}</span>
-            </div>
-          )}
-          <div class="flex justify-between font-semibold border-t pt-2">
-            <span>Tổng tiền thanh toán</span>
-            <span>{formatCurrency(total)}</span>
-          </div>
-        </div>
+        <p>Đang tải...</p>
       </aside>
 
     </div>
   </section>
+
+  <script>
+    function formatCurrency(num) {
+      if (isNaN(num)) return "0 đ";
+      return num.toLocaleString("vi-VN") + " đ";
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const plan = params.get("plan") ?? "Không xác định";
+    const months = parseInt(params.get("months") ?? "0", 10);
+    const addon = parseInt(params.get("addon") ?? "0", 10);
+    const total = parseInt(params.get("total") ?? "0", 10);
+
+    const addonText = addon > 0 ? `${addon} × 10,000,000 đ` : null;
+    const transferContent = `Thanh toan ${plan}`;
+
+    // Render cột trái
+    document.getElementById("payment-info").innerHTML = `
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-500">Ngân hàng</label>
+          <input type="text" value="MBBank" disabled class="w-full border rounded-lg px-3 py-2 bg-gray-100" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500">Số tài khoản</label>
+          <div class="flex items-center">
+            <input type="text" value="2222233666666" disabled class="flex-1 border rounded-lg px-3 py-2 bg-gray-100" />
+            <button class="ml-2 text-blue-600 text-sm" onclick="navigator.clipboard.writeText('2222233666666')">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-500">Số tiền chuyển khoản</label>
+          <input type="text" value="${formatCurrency(total)}" disabled class="w-full border rounded-lg px-3 py-2 bg-gray-100 font-semibold" />
+        </div>
+        <div>
+          <label class="block text-sm text-gray-500">Nội dung *</label>
+          <div class="flex items-center">
+            <input type="text" value="${transferContent}" disabled class="flex-1 border rounded-lg px-3 py-2 bg-gray-100" />
+            <button class="ml-2 text-blue-600 text-sm" onclick="navigator.clipboard.writeText('${transferContent}')">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm text-gray-500">Chủ tài khoản</label>
+        <input type="text" value="NGUYEN HAI LONG" disabled class="w-full border rounded-lg px-3 py-2 bg-gray-100" />
+      </div>
+    `;
+
+    // Render cột phải
+    document.getElementById("invoice-details").innerHTML = `
+      <h3 class="font-semibold text-lg mb-4">Chi tiết hóa đơn</h3>
+      <div class="space-y-2 text-sm">
+        <div class="flex justify-between">
+          <span>Gói</span>
+          <span>${plan}</span>
+        </div>
+        <div class="flex justify-between">
+          <span>Thời hạn</span>
+          <span>${months} tháng</span>
+        </div>
+        ${addonText ? `
+          <div class="flex justify-between">
+            <span>Build Bot AI</span>
+            <span>${addonText}</span>
+          </div>` : ""}
+        <div class="flex justify-between font-semibold border-t pt-2">
+          <span>Tổng tiền thanh toán</span>
+          <span>${formatCurrency(total)}</span>
+        </div>
+      </div>
+    `;
+  </script>
 </BaseLayout>
