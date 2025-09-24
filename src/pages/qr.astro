@@ -2,8 +2,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Pilling from "../components/landing/Pilling.astro";
 
+const { searchParams } = Astro.url;
+const total = searchParams.get("total") || "0";
+const plan = searchParams.get("plan") || "";
+const months = searchParams.get("months") || "1";
+const addon = searchParams.get("addon") || "0";
 ---
 
 <BaseLayout>
-  <Pilling/>
+  <Pilling total={total} plan={plan} months={months} addon={addon} />
 </BaseLayout>

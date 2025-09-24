@@ -1,9 +1,5 @@
 ---
-const { searchParams } = Astro.url;
-const plan = searchParams.get("plan") || "Không xác định";
-const months = searchParams.get("months") || "0";
-const addon = searchParams.get("addon") || "0";
-const total = searchParams.get("total") || "0";
+const { plan, months, addon, total } = Astro.props;
 
 function formatCurrency(num) {
   return Number(num).toLocaleString("vi-VN") + " đ";
