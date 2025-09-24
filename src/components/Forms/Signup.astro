@@ -6,14 +6,15 @@
       >
         Join our community
       </h2>
-      <p class="text-base leading-normal mt-4 text-base-500 font-medium">
+      <p class="text-base leading-normal mt-4 text-base-700 font-medium">
         Sign up to join our community and start building your brand.
       </p>
     </div>
     <form action="#" method="POST" class="mx-auto mt-12 max-w-lg">
       <div class="flex flex-col gap-y-6">
+        <!-- First Name -->
         <div>
-          <label class="text-base leading-normal text-base-500 font-medium">
+          <label class="text-base leading-normal text-base-700 font-medium">
             First name
           </label>
           <div class="mt-2.5">
@@ -33,8 +34,10 @@
             </span>
           </div>
         </div>
+
+        <!-- Email -->
         <div>
-          <label class="text-base leading-normal text-base-500 font-medium">
+          <label class="text-base leading-normal text-base-700 font-medium">
             Email
           </label>
           <div class="mt-2.5">
@@ -54,7 +57,77 @@
             </span>
           </div>
         </div>
+
+        <!-- Username -->
+        <div>
+          <label class="text-base leading-normal text-base-700 font-medium">
+            Username
+          </label>
+          <div class="mt-2.5">
+            <input
+              type="text"
+              name="username"
+              id="username"
+              required
+              aria-required="true"
+              aria-describedby="username-error"
+              placeholder="Choose a username"
+              class="block w-full h-10 px-4 py-2 text-sm text-accent-700 duration-300 bg-white border border-transparent rounded-lg appearance-none ring-1 ring-base-200 placeholder-base-400 focus:border-base-300 focus:bg-transparent focus:outline-none focus:ring-accent-500 focus:ring-offset-2 focus:ring-2 sm:text-sm"
+            />
+            <span id="username-error" class="text-red-600 text-sm hidden">
+              Please enter a username.
+            </span>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="text-base leading-normal text-base-700 font-medium">
+            Password
+          </label>
+          <div class="mt-2.5">
+            <input
+              type="password"
+              name="password"
+              id="password"
+              autocomplete="new-password"
+              required
+              aria-required="true"
+              aria-describedby="password-error"
+              placeholder="Create a password"
+              class="block w-full h-10 px-4 py-2 text-sm text-accent-700 duration-300 bg-white border border-transparent rounded-lg appearance-none ring-1 ring-base-200 placeholder-base-400 focus:border-base-300 focus:bg-transparent focus:outline-none focus:ring-accent-500 focus:ring-offset-2 focus:ring-2 sm:text-sm"
+            />
+            <span id="password-error" class="text-red-600 text-sm hidden">
+              Please enter a password.
+            </span>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label class="text-base leading-normal text-base-700 font-medium">
+            Confirm Password
+          </label>
+          <div class="mt-2.5">
+            <input
+              type="password"
+              name="confirm-password"
+              id="confirm-password"
+              autocomplete="new-password"
+              required
+              aria-required="true"
+              aria-describedby="confirm-password-error"
+              placeholder="Re-enter your password"
+              class="block w-full h-10 px-4 py-2 text-sm text-accent-700 duration-300 bg-white border border-transparent rounded-lg appearance-none ring-1 ring-base-200 placeholder-base-400 focus:border-base-300 focus:bg-transparent focus:outline-none focus:ring-accent-500 focus:ring-offset-2 focus:ring-2 sm:text-sm"
+            />
+            <span id="confirm-password-error" class="text-red-600 text-sm hidden">
+              Please confirm your password.
+            </span>
+          </div>
+        </div>
       </div>
+
+      <!-- Agreement -->
       <div class="flex items-center mt-4 gap-3">
         <input
           id="agreement"
@@ -62,23 +135,25 @@
           type="checkbox"
           class="size-4 rounded border-base-300 text-accent-600 focus:ring-accent-600 shadow"
         />
-        <label class="undefined block text-sm text-base-500 font-medium">
+        <label class="undefined block text-sm text-base-700 font-medium">
           You agree to our
           <a
-            class="text-base leading-normal text-accent-500 font-medium hover:text-base-500"
+            class="text-base leading-normal text-accent-500 font-medium hover:text-base-700"
             href="#_"
           >
             Terms of service
           </a>
           and
           <a
-            class="text-base leading-normal text-accent-500 font-medium hover:text-base-500"
+            class="text-base leading-normal text-accent-500 font-medium hover:text-base-700"
             href="#_"
           >
             Privacy Policy
           </a>
         </label>
       </div>
+
+      <!-- Submit Button -->
       <div class="mt-10">
         <button
           class="flex items-center justify-center transition-all duration-200 focus:ring-2 focus:outline-none text-white bg-accent-600 hover:bg-accent-700 focus:ring-accent-500/50 h-10 px-6 py-3 text-base font-medium rounded-lg w-full"
@@ -86,11 +161,13 @@
           Sign up
         </button>
       </div>
+
+      <!-- Already have account -->
       <div class="flex items-center mt-4">
-        <p class="text-sm leading-normal text-base-500 font-medium">
-          Don't have an account? Already have an account?
+        <p class="text-sm leading-normal text-base-700 font-medium">
+          Already have an account?
           <a
-            class="text-base leading-normal text-accent-500 font-medium hover:text-base-500"
+            class="text-base leading-normal text-accent-500 font-medium hover:text-base-700"
             href="#_"
           >
             Sign in
