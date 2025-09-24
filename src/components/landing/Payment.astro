@@ -1,3 +1,6 @@
+---
+--- 
+
 <section class="py-20 bg-gray-50">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -46,7 +49,7 @@
               <span>×3</span>
             </label>
 
-            <label class="flex justify-between items-center border border-blue-500 bg-blue-50 rounded-lg p-3 cursor-pointer">
+            <label class="flex justify-between items-center border border-gray-400 bg-blue-50 rounded-lg p-3 cursor-pointer">
               <div class="flex items-center gap-2">
                 <input type="radio" name="duration" value="6" checked class="duration" />
                 <span>6 tháng</span>
@@ -84,14 +87,9 @@
       <!-- Cột phải: Chi tiết hóa đơn -->
       <aside class="bg-white rounded-2xl shadow p-6 h-fit">
         <h3 class="font-semibold text-lg mb-4">Chi tiết hóa đơn</h3>
-        <div class="space-y-2 text-sm" id="invoice">
-          <!-- Render bằng JS -->
-        </div>
-        <button class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
+        <div class="space-y-2 text-sm" id="invoice"></div>
+        <button id="payBtn" class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">
           Tiếp tục thanh toán
-        </button>
-        <button class="mt-3 w-full border border-gray-400 py-2 rounded-lg font-medium">
-          Gửi thông tin thanh toán qua SMS
         </button>
       </aside>
     </div>
@@ -106,6 +104,7 @@
   const plusBtn = document.getElementById("plusBtn");
   const minusBtn = document.getElementById("minusBtn");
   const invoiceDiv = document.getElementById("invoice");
+  const payBtn = document.getElementById("payBtn");
 
   const ADDON_PRICE = 10000000;
 
@@ -143,6 +142,25 @@
   addonQty.addEventListener("input", calcInvoice);
   plusBtn.addEventListener("click", () => { addonQty.stepUp(); calcInvoice(); });
   minusBtn.addEventListener("click", () => { addonQty.stepDown(); calcInvoice(); });
+
+  payBtn.addEventListener("click", () => {
+    const plan = document.querySelector(".plan:checked");
+    const duration = document.querySelector(".duration:checked");
+    const addon = addonCheck.checked ? parseInt(addonQty.value) : 0;
+
+    if (!plan || !duration) {
+      alert("Vui lòng chọn gói dịch vụ và thời hạn trước khi thanh toán!");
+      return;
+    }
+
+    const planPrice = parseInt(plan.value);
+    const months = parseInt(duration.value);
+    let total = planPrice * months;
+    if (addon > 0) total += ADDON_PRICE * addon;
+
+    const url = `/qr?plan=${encodeURIComponent(plan.nextElementSibling.textContent)}&months=${months}&addon=${addon}&total=${total}`;
+    window.location.href = url;
+  });
 
   calcInvoice();
 </script>
