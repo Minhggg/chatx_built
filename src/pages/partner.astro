@@ -1,0 +1,224 @@
+---
+import BaseLayout2 from "../layouts/BaseLayout2.astro";
+---
+
+<BaseLayout2>
+  <!-- Hero Section -->
+  <section class="py-20 bg-white text-center">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900">
+        Nhận Tiền. <span class="text-black">20% Mỗi Giao Dịch</span>
+      </h1>
+      <p class="mt-4 text-lg text-gray-700">
+        Trở Thành Đối Tác Của Chúng Tôi Ngay Hôm Nay.
+      </p>
+      <p class="mt-2 text-sm text-gray-500">
+        Giới thiệu Dịch vụ AI AI Agent của chúng tôi cho bạn bè hoặc khách hàng của bạn và 
+        <span class="font-semibold">kiếm thêm thu nhập.</span>
+      </p>
+      <div class="mt-6">
+        <button id="openModal"
+           class="px-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800">
+          THAM GIA CHƯƠNG TRÌNH TIẾP THỊ LIÊN KẾT
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Form -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <!-- Nút đóng -->
+      <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+        ✕
+      </button>
+
+      <!-- Tiêu đề -->
+      <h2 class="text-lg font-semibold mb-1">Đăng ký tham gia chương trình</h2>
+      <p class="text-sm text-gray-500 mb-4">
+        Vui lòng điền thông tin của bạn để tham gia chương trình tiếp thị liên kết.
+      </p>
+
+      <!-- Form -->
+      <form id="registerForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Họ và tên</label>
+          <input type="text" required placeholder="Nhập họ và tên của bạn" 
+            class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+          <input type="tel" required placeholder="Nhập số điện thoại của bạn" 
+            class="mt-1 w-full border rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+        <button id="submitBtn" type="submit" 
+          class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 active:scale-95 transition">
+          Đăng ký
+        </button>
+      </form>
+
+      <!-- Thông báo -->
+      <p id="successMsg" class="hidden mt-4 text-green-600 font-medium text-center">
+        ✅ Đăng ký thành công!
+      </p>
+    </div>
+  </div>
+
+  <!-- Thu Nhập Tiềm Năng -->
+  <section id="thu-nhap" class="py-16 bg-gray-50 text-center">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
+        Thu Nhập Tiềm Năng
+      </h2>
+      <p class="mt-2 text-gray-500">(Giả định 10 đơn hàng bổ sung/tháng)</p>
+
+      <!-- Toggle Buttons -->
+      <div class="mt-6 flex justify-center gap-4">
+        <button data-period="3" class="tab-btn px-4 py-2 rounded-md bg-gray-900 text-white">3 Tháng</button>
+        <button data-period="6" class="tab-btn px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200">6 Tháng</button>
+        <button data-period="12" class="tab-btn px-4 py-2 rounded-md bg-gray-100 hover:bg-gray-200">12 Tháng</button>
+      </div>
+
+      <!-- Bảng Thu Nhập -->
+      <div class="mt-8 overflow-x-auto">
+        <table class="w-full min-w-[700px] border-collapse rounded-xl overflow-hidden shadow">
+          <thead class="bg-gray-100 text-gray-700">
+            <tr>
+              <th class="py-3 px-4 text-left">Gói</th>
+              <th class="py-3 px-4">Thanh toán</th>
+              <th class="py-3 px-4">Hoa hồng/hợp đồng</th>
+              <th class="py-3 px-4">Hoa hồng theo tháng</th>
+              <th class="py-3 px-4">Hoa hồng 1 năm</th>
+            </tr>
+          </thead>
+          <tbody id="income-table" class="bg-gray-800 text-white">
+            <!-- dữ liệu sẽ render bằng JS -->
+          </tbody>
+        </table>
+        <p class="mt-4 text-sm text-gray-500">
+          * Hoa hồng/hợp đồng là 30% của giá trị hợp đồng. Hoa hồng theo tháng dựa trên giả định bán thêm 10 đơn hàng mỗi tháng. 
+          Hoa hồng 1 năm là tổng hoa hồng cho 12 tháng.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lĩnh vực -->
+  <section class="py-20 bg-white text-center">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
+        Kiếm tiền với Chatx. Trở thành đối tác liên kết của chúng tôi.
+      </h2>
+      <p class="mt-2 text-gray-500 max-w-2xl mx-auto">
+        Trợ lý AI Agent của chúng tôi có thể được tùy chỉnh cho bất kỳ ngành nào chỉ trong 5 phút!
+      </p>
+
+      <!-- Lĩnh vực tags -->
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Y tế</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Tài chính</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Giáo dục</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Bán lẻ</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Khách sạn</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Bất động sản</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Tư vấn</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Ô tô</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Giải trí</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Ẩm thực</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Thể dục & Sức khỏe</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Thương mại điện tử</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Vận tải</span>
+        <span class="px-4 py-2 rounded-lg bg-gray-100">Pháp lý</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Script -->
+  <script>
+    const data = {
+      3: [
+        { goi: "Gói Cá Nhân", sub: "Dành cho cá nhân", thanhToan: "600,000đ", hoaHongHD: "180,000đ", hoaHongThang: "1,800,000đ (10 đơn/tháng)", hoaHongNam: "21,600,000đ/năm" },
+        { goi: "Gói Doanh Nghiệp", sub: "Dành cho doanh nghiệp", thanhToan: "7,107,000đ", hoaHongHD: "2,132,100đ", hoaHongThang: "21,321,000đ (10 đơn/tháng)", hoaHongNam: "255,852,000đ/năm" },
+        { goi: "Gói Tập Đoàn", sub: "Dành cho tập đoàn", thanhToan: "15,000,000đ", hoaHongHD: "4,500,000đ", hoaHongThang: "45,000,000đ (10 đơn/tháng)", hoaHongNam: "540,000,000đ/năm" }
+      ],
+      6: [
+        { goi: "Gói Cá Nhân", sub: "Dành cho cá nhân", thanhToan: "1,200,000đ", hoaHongHD: "360,000đ", hoaHongThang: "3,600,000đ (10 đơn/tháng)", hoaHongNam: "43,200,000đ/năm" },
+        { goi: "Gói Doanh Nghiệp", sub: "Dành cho doanh nghiệp", thanhToan: "14,214,000đ", hoaHongHD: "4,264,200đ", hoaHongThang: "42,642,000đ (10 đơn/tháng)", hoaHongNam: "511,704,000đ/năm" },
+        { goi: "Gói Tập Đoàn", sub: "Dành cho tập đoàn", thanhToan: "30,000,000đ", hoaHongHD: "9,000,000đ", hoaHongThang: "90,000,000đ (10 đơn/tháng)", hoaHongNam: "1,080,000,000đ/năm" }
+      ],
+      12: [
+        { goi: "Gói Cá Nhân", sub: "Dành cho cá nhân", thanhToan: "2,400,000đ", hoaHongHD: "720,000đ", hoaHongThang: "7,200,000đ (10 đơn/tháng)", hoaHongNam: "86,400,000đ/năm" },
+        { goi: "Gói Doanh Nghiệp", sub: "Dành cho doanh nghiệp", thanhToan: "28,428,000đ", hoaHongHD: "8,528,400đ", hoaHongThang: "85,284,000đ (10 đơn/tháng)", hoaHongNam: "1,023,408,000đ/năm" },
+        { goi: "Gói Tập Đoàn", sub: "Dành cho tập đoàn", thanhToan: "60,000,000đ", hoaHongHD: "18,000,000đ", hoaHongThang: "180,000,000đ (10 đơn/tháng)", hoaHongNam: "2,160,000,000đ/năm" }
+      ]
+    };
+
+    const tableBody = document.getElementById("income-table");
+    const buttons = document.querySelectorAll(".tab-btn");
+
+    function renderTable(period) {
+      tableBody.innerHTML = data[period].map(row => `
+        <tr class="border-t border-gray-700">
+          <td class="py-3 px-4 text-left font-semibold">${row.goi}<br><span class="text-sm text-gray-300">${row.sub}</span></td>
+          <td class="py-3 px-4">${row.thanhToan}</td>
+          <td class="py-3 px-4">${row.hoaHongHD}</td>
+          <td class="py-3 px-4">${row.hoaHongThang}</td>
+          <td class="py-3 px-4 font-semibold">${row.hoaHongNam}</td>
+        </tr>
+      `).join("");
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("bg-gray-900","text-white"));
+        buttons.forEach(b => b.classList.add("bg-gray-100"));
+        btn.classList.add("bg-gray-900","text-white");
+        renderTable(btn.dataset.period);
+      });
+    });
+
+    // mặc định load 3 tháng
+    renderTable(3);
+
+    // ===== Modal Script =====
+    const modal = document.getElementById("modal");
+    const openBtn = document.getElementById("openModal");
+    const closeBtn = document.getElementById("closeModal");
+    const form = document.getElementById("registerForm");
+    const successMsg = document.getElementById("successMsg");
+    const submitBtn = document.getElementById("submitBtn");
+
+    // Mở form
+    openBtn.addEventListener("click", () => {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      successMsg.classList.add("hidden");
+      form.reset();
+    });
+
+    // Đóng form
+    closeBtn.addEventListener("click", () => {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    });
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+    });
+
+    // Submit form
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Đang xử lý...";
+
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Đăng ký";
+        successMsg.classList.remove("hidden");
+      }, 1500);
+    });
+  </script>
+</BaseLayout>

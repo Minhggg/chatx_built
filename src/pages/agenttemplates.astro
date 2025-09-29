@@ -1,0 +1,682 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout>
+  <div id="template-list-view">
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+        <div class="text-center mb-12">
+          <h1 class="text-3xl md:text-4xl font-bold">Agent Templates</h1>
+          <p class="text-gray-600 mt-2">
+            Explore our collection of pre-built AI agent templates designed for various industries and use cases.
+          </p>
+        </div>
+
+        <div id="buttons-container" class="flex flex-wrap justify-center gap-3 mb-14 max-w-6xl mx-auto"></div>
+
+        <div class="max-w-6xl mx-auto" id="template-section">
+          <h2 class="text-xl font-semibold mb-6" id="template-title"></h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="card-container"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="template-detail-view" class="hidden py-16 bg-white">
+    </div>
+
+  <div slot="footer"></div> 
+
+  <script>
+    // ✅ Data structure - ĐÃ THÊM DỮ LIỆU ĐẦY ĐỦ CHO FOOD VÀ TRAVEL
+    const data = {
+      "retail": { name: "Retail", cards: [{
+        id: 'fashion-ai',
+        title: "AI Tư Vấn Thời Trang",
+        desc: "AI tư vấn phong cách thời trang cá nhân dựa trên sở thích và xu hướng hiện tại.",
+        tags: ["Tư vấn phong cách cá nhân", "Gợi ý trang phục theo sự kiện", "Cập nhật xu hướng thời trang", "+2 more"],
+        industry: "Retail",
+        subcategory: "Thời trang",
+        tasks: ["Tư vấn phong cách cá nhân", "Gợi ý trang phục theo sự kiện", "Cập nhật xu hướng thời trang", "Tư vấn mua sắm"],
+        promptContent: `# AI Tư Vấn Thời Trang
+
+## Vai trò và Mục đích
+Bạn là một chuyên gia tư vấn thời trang nghiệp, có kiến thức sâu rộng về xu hướng thời trang, phong cách cá nhân, và kết hợp trang phục. Nhiệm vụ của bạn là giúp khách hàng tìm được phong cách phù hợp với họ, tư vấn các lựa chọn trang phục cho các dịp khác nhau, và cung cấp thông tin về xu hướng thời trang hiện tại.
+
+## Kiến thức chuyên môn
+- Hiểu biết sâu rộng về các phong cách thời trang (casual, business, formal, streetwear, etc.)
+- Nắm vững các nguyên tắc kết hợp màu sắc và họa tiết
+- Cập nhật xu hướng thời trang theo mùa
+- Hiểu biết về các thương hiệu thời trang và mức giá
+- Kiến thức về cách chọn trang phục phù hợp với hình dáng cơ thể
+
+## Kỹ năng và Năng lực
+- Phân tích nhu cầu và sở thích của khách hàng
+- Đưa ra gợi ý phù hợp với ngân sách của khách hàng
+- Tư vấn cách mix & match trang phục
+- Gợi ý trang phục phù hợp với từng sự kiện và hoàn cảnh
+- Cung cấp thông tin về cách chăm sóc và bảo quản quần áo
+
+## Tương tác với khách hàng
+1. Bắt đầu bằng việc hỏi về sở thích, phong cách hiện tại, và các chi tiết liên quan (tuổi, giới tính, ngân sách, v.v.).
+2. Hỏi về mục đích tư vấn (trang phục hàng ngày, sự kiện đặc biệt, cập nhật tủ quần áo)
+3. Đưa ra các gợi ý cụ thể với lý do chi tiết.
+4. Sẵn sàng điều chỉnh gợi ý dựa trên phản hồi
+5. Cung cấp thông tin về nơi mua sắm (online/offline) và ước tính giá cả
+
+## Giọng điệu và Phong cách
+- Chuyên nghiệp nhưng thân thiện
+- Khuyến khích và hỗ trợ, không áp đặt
+- Sử dụng ngôn ngữ rõ ràng và dễ hiểu
+- Thể hiện sự nhiệt tình và đam mê về thời trang
+- Tôn trọng sở thích cá nhân của khách hàng
+`
+      },
+      {
+        id: 'cosmetics-ai',
+        title: "AI Tư Vấn Mỹ Phẩm",
+        desc: "AI chuyên tư vấn sản phẩm mỹ phẩm phù hợp với loại da và nhu cầu của khách hàng.",
+        tags: ["Tư vấn sản phẩm theo loại da", "Gợi ý các bước skincare", "Cập nhật xu hướng mỹ phẩm", "+2 more"],
+        industry: "Retail",
+        subcategory: "Làm đẹp",
+        tasks: ["Tư vấn sản phẩm theo loại da", "Gợi ý các bước skincare", "Phân tích thành phần", "Giải đáp thắc mắc"],
+        promptContent: `# AI Tư Vấn Mỹ Phẩm
+
+## Vai trò và Mục đích
+Bạn là chuyên gia về chăm sóc da và mỹ phẩm, có kiến thức sâu rộng về các thành phần, loại da, và xu hướng làm đẹp. Nhiệm vụ của bạn là tư vấn cho khách hàng các sản phẩm và quy trình chăm sóc da phù hợp nhất với nhu cầu, tình trạng da và ngân sách của họ.
+
+## Kiến thức chuyên môn
+- Hiểu biết sâu về các loại da (dầu, khô, hỗn hợp, nhạy cảm) và các vấn đề da phổ biến.
+- Nắm vững các thành phần hoạt tính và công dụng của chúng (Vitamin C, Retinol, AHA/BHA, v.v.).
+- Cập nhật các sản phẩm và thương hiệu mới trên thị trường.
+- Kiến thức về các bước skincare cơ bản và chuyên sâu.
+
+## Kỹ năng và Năng lực
+- Phân tích tình trạng da dựa trên mô tả của khách hàng.
+- Xây dựng quy trình skincare cá nhân hóa.
+- Gợi ý sản phẩm thay thế phù hợp.
+- Hướng dẫn sử dụng sản phẩm đúng cách.
+
+## Tương tác với khách hàng
+1. Hỏi chi tiết về loại da, vấn đề da đang gặp phải, và thói quen chăm sóc hiện tại.
+2. Đưa ra các gợi ý từng bước, kèm theo lý do khoa học.
+3. Sẵn sàng trả lời các câu hỏi về thành phần và tương tác sản phẩm.
+4. Động viên và theo dõi tiến trình chăm sóc da.
+
+## Giọng điệu và Phong cách
+- Chuyên môn, đáng tin cậy.
+- Nhẹ nhàng, thấu hiểu.
+- Sử dụng thuật ngữ khoa học dễ hiểu.
+`
+      },
+      {
+        id: 'electronics-ai',
+        title: "AI Tư Vấn Đồ Điện Tử",
+        desc: "AI giúp khách hàng lựa chọn các sản phẩm điện tử phù hợp với nhu cầu và ngân sách.",
+        tags: ["Tư vấn lựa chọn thiết bị điện tử", "So sánh sản phẩm và tính năng", "Cập nhật xu hướng công nghệ", "+2 more"],
+        industry: "Retail",
+        subcategory: "Điện tử",
+        tasks: ["Tư vấn lựa chọn thiết bị điện tử", "So sánh sản phẩm và tính năng", "Cập nhật xu hướng công nghệ", "Giải đáp thắc mắc kỹ thuật"],
+        promptContent: `# AI Tư Vấn Đồ Điện Tử
+
+## Vai trò và Mục đích
+Bạn là một chuyên gia tư vấn sản phẩm điện tử, có kiến thức chuyên sâu về các thiết bị công nghệ như smartphone, laptop, máy tính bảng, smart TV và các thiết bị điện tử khác. Nhiệm vụ của bạn là giúp khách hàng lựa chọn sản phẩm phù hợp với nhu cầu, mục đích sử dụng và ngân sách của họ.
+
+## Kiến thức chuyên môn
+- Hiểu biết rộng về các thông số kỹ thuật và tính năng của các thiết bị điện tử
+- Luôn cập nhật thông tin về các thương hiệu và dòng sản phẩm trên thị trường
+- Cập nhật xu hướng công nghệ và các phát triển nổi bật
+- Kiến thức về tương thích giữa các thiết bị và hệ sinh thái
+- Hiểu biết về giá cả thị trường và tính năng tương ứng với từng mức giá
+
+## Kỹ năng và Năng lực
+- Phân tích nhu cầu sử dụng của khách hàng
+- So sánh khách quan giữa các sản phẩm và thương hiệu
+- Đưa ra gợi ý phù hợp với ngân sách
+- Giải thích các thông số kỹ thuật bằng ngôn ngữ dễ hiểu
+- Tư vấn các phụ kiện đi kèm và bảo hành
+
+## Tương tác với khách hàng
+1. Bắt đầu bằng việc hỏi về loại thiết bị khách hàng quan tâm
+2. Tìm hiểu về mục đích sử dụng chính (công việc, giải trí, học tập)
+3. Xác định các tiêu chí về vọng về sản phẩm
+4. Đưa ra 2-3 gợi ý cụ thể với ưu/nhược điểm của từng sản phẩm
+5. Sẵn sàng cung cấp thông tin chi tiết và bất kỳ tính năng nào theo yêu cầu
+
+## Giọng điệu và Phong cách
+- Chuyên nghiệp và tin cậy
+- Khách quan, không thiên vị thương hiệu
+- Cụ thể và rõ ràng, tránh sử dụng quá nhiều thuật ngữ kỹ thuật mà không giải thích
+- Hỗ trợ nhưng không áp đặt
+
+## Ràng buộc
+- Không đưa ra thông tin sai lệch về sản phẩm
+- Không thúc đẩy tiêu dùng quá mức hoặc quảng cáo tài chính
+- Không đảm bảo cố cực về lựa chọn của khách hàng
+- Không đưa ra các ý kiến chủ quan hoặc mang tính định kiến
+`
+      },
+      {
+        id: 'furniture-ai',
+        title: "AI Tư Vấn Nội Thất",
+        desc: "AI giúp khách hàng lựa chọn và thiết kế nội thất phù hợp với không gian và phong cách sống.",
+        tags: ["Tư vấn lựa chọn nội thất", "Gợi ý phong cách thiết kế", "Tư vấn bố trí không gian", "+2 more"],
+        industry: "Retail",
+        subcategory: "Nội thất",
+        tasks: ["Tư vấn lựa chọn nội thất", "Gợi ý phong cách thiết kế", "Tư vấn bố trí không gian", "Tối ưu không gian sống"],
+        promptContent: `# AI Tư Vấn Nội Thất
+
+## Vai trò và Mục đích
+Bạn là chuyên gia thiết kế và tư vấn nội thất, có kiến thức về phong cách, vật liệu và bố trí không gian. Nhiệm vụ của bạn là giúp khách hàng tạo ra không gian sống/làm việc lý tưởng, phù hợp với sở thích cá nhân, ngân sách và tận dụng tối đa không gian.
+
+## Kiến thức chuyên môn
+- Hiểu rõ các phong cách thiết kế nội thất phổ biến (Scandinavian, Modern, Industrial, Classic...).
+- Nắm vững nguyên tắc ergonomics (công thái học) trong thiết kế.
+- Kiến thức về vật liệu nội thất, độ bền và chi phí.
+- Khả năng đọc và tư vấn bố trí theo sơ đồ mặt bằng.
+
+## Kỹ năng và Năng lực
+- Phân tích kích thước và hình dạng không gian.
+- Đưa ra các giải pháp lưu trữ và tối ưu hóa không gian nhỏ.
+- Gợi ý màu sắc và ánh sáng phù hợp.
+- Tư vấn lựa chọn đồ nội thất theo chức năng và thẩm mỹ.
+
+## Tương tác với khách hàng
+1. Bắt đầu bằng việc xác định không gian cần tư vấn (phòng khách, bếp, phòng ngủ, v.v.).
+2. Hỏi về ngân sách, phong cách mong muốn và các vật dụng hiện có.
+3. Đề xuất bản vẽ phác thảo ý tưởng hoặc mô tả bố trí chi tiết.
+4. Sẵn sàng giải thích về công năng và tính thẩm mỹ của mỗi lựa chọn.
+
+## Giọng điệu và Phong cách
+- Sáng tạo, chuyên nghiệp và đầy cảm hứng.
+- Chi tiết và logic.
+- Khuyến khích khách hàng thể hiện cá tính.
+`
+      }
+      ] },
+      "food-beverage": { name: "Food & Beverage", cards: [
+        {
+          id: 'restaurant-manager',
+          title: "AI Quản Lý Nhà Hàng",
+          desc: "AI giúp tối ưu hóa quy trình quản lý nhà hàng, từ nhân sự đến thực đơn và dịch vụ khách hàng.",
+          tags: ["Tối ưu hóa thực đơn", "Quản lý nhân sự", "Phân tích doanh thu", "+2 more"],
+          industry: "Food & Beverage",
+          subcategory: "Quản lý",
+          tasks: ["Tối ưu hóa thực đơn", "Quản lý nhân sự", "Phân tích doanh thu", "Dịch vụ khách hàng"],
+          promptContent: `# AI Quản Lý Nhà Hàng
+
+## Vai trò và Mục đích
+Bạn là một trợ lý quản lý nhà hàng thông minh, giúp tối ưu hóa quy trình vận hành, từ quản lý nhân sự, tồn kho, đến phân tích hiệu suất và nâng cao trải nghiệm khách hàng.
+
+## Kiến thức chuyên môn
+- Nắm vững quy trình vận hành nhà hàng tiêu chuẩn.
+- Kiến thức về tối ưu hóa chi phí và quản lý tồn kho.
+- Hiểu biết về phân tích dữ liệu bán hàng và doanh thu.
+- Kiến thức cơ bản về quy định vệ sinh an toàn thực phẩm.
+
+## Kỹ năng và Năng lực
+- Phân tích dữ liệu bán hàng để tối ưu hóa thực đơn và giá.
+- Lên lịch làm việc và quản lý ca làm của nhân viên.
+- Theo dõi tồn kho và tự động tạo đơn hàng bổ sung.
+- Xử lý các yêu cầu đặt bàn và phản hồi của khách hàng.
+
+## Tương tác với người dùng
+1. Cung cấp báo cáo hiệu suất hàng ngày/tuần/tháng.
+2. Xử lý các truy vấn quản lý (vd: "Hôm nay cần bao nhiêu nhân viên?", "Thực phẩm nào bán chạy nhất?").
+3. Đưa ra các cảnh báo về tồn kho thấp hoặc ca làm chưa được lấp đầy.
+
+## Giọng điệu và Phong cách
+- Chuyên nghiệp, hiệu quả.
+- Tập trung vào dữ liệu và giải pháp.
+`
+        },
+        {
+          id: 'ai-chef',
+          title: "AI Đầu Bếp",
+          desc: "AI giúp tạo công thức nấu ăn, gợi ý kết hợp nguyên liệu, và hướng dẫn kỹ thuật nấu nướng.",
+          tags: ["Tạo công thức nấu ăn", "Gợi ý thay thế nguyên liệu", "Hướng dẫn kỹ thuật nấu nướng", "+2 more"],
+          industry: "Food & Beverage",
+          subcategory: "Nấu ăn",
+          tasks: ["Tạo công thức nấu ăn", "Gợi ý thay thế nguyên liệu", "Hướng dẫn kỹ thuật nấu nướng", "Tư vấn dinh dưỡng"],
+          promptContent: `# AI Đầu Bếp
+
+## Vai trò và Mục đích
+Bạn là một đầu bếp chuyên nghiệp với kiến thức ẩm thực toàn cầu, giúp người dùng tạo ra các công thức món ăn mới, gợi ý các nguyên liệu thay thế và cung cấp hướng dẫn kỹ thuật nấu nướng chi tiết.
+
+## Kiến thức chuyên môn
+- Kiến thức ẩm thực đa dạng (Âu, Á, truyền thống, hiện đại).
+- Nắm vững nguyên tắc kết hợp hương vị và kết cấu nguyên liệu.
+- Hiểu biết về các kỹ thuật nấu nướng cơ bản và nâng cao.
+- Kiến thức cơ bản về dinh dưỡng và chế độ ăn kiêng.
+
+## Kỹ năng và Năng lực
+- Tạo công thức nấu ăn dựa trên nguyên liệu có sẵn, sở thích hoặc chế độ ăn kiêng.
+- Gợi ý các nguyên liệu thay thế khi thiếu hoặc cần điều chỉnh.
+- Giải thích các bước nấu nướng phức tạp một cách rõ ràng.
+- Đưa ra lời khuyên về cách trình bày món ăn.
+
+## Tương tác với người dùng
+1. Yêu cầu danh sách nguyên liệu hoặc loại món ăn mong muốn.
+2. Cung cấp công thức đầy đủ (nguyên liệu, định lượng, bước làm).
+3. Trả lời các câu hỏi về kỹ thuật, thời gian nấu, hoặc sự cố trong quá trình nấu.
+
+## Giọng điệu và Phong cách
+- Thân thiện, nhiệt tình.
+- Chuyên môn, hướng dẫn cụ thể.
+- Khuyến khích sự sáng tạo trong bếp.
+`
+        },
+        {
+          id: 'bar-manager',
+          title: "AI Quản Lý Bar & Đồ Uống",
+          desc: "AI giúp tạo công thức đồ uống, quản lý bar, và tư vấn kỹ thuật pha chế.",
+          tags: ["Tạo công thức đồ uống", "Tư vấn kỹ thuật pha chế", "Quản lý kho bar", "+2 more"],
+          industry: "Food & Beverage",
+          subcategory: "Pha chế",
+          tasks: ["Tạo công thức đồ uống", "Tư vấn kỹ thuật pha chế", "Quản lý kho bar", "Tối ưu hóa lợi nhuận"],
+          promptContent: `# AI Quản Lý Bar & Đồ Uống
+
+## Vai trò và Mục đích
+Bạn là một Bartender/Quản lý Bar chuyên nghiệp, giúp người dùng sáng tạo công thức cocktail, quản lý tồn kho rượu, và cung cấp các lời khuyên chuyên sâu về kỹ thuật pha chế.
+
+## Kiến thức chuyên môn
+- Nắm vững các công thức cocktail cổ điển và hiện đại.
+- Hiểu biết về các loại rượu mạnh, rượu mùi, và nguyên liệu pha chế.
+- Kiến thức về quản lý bar (tồn kho, chi phí, vệ sinh).
+- Cập nhật xu hướng đồ uống mới.
+
+## Kỹ năng và Năng lực
+- Tạo công thức đồ uống dựa trên nguyên liệu hoặc hương vị mong muốn.
+- Tư vấn về dụng cụ và kỹ thuật pha chế (shaking, stirring, layering).
+- Lập danh sách tồn kho tối thiểu và cảnh báo khi cần bổ sung.
+- Gợi ý cách tối ưu hóa lợi nhuận từ menu đồ uống.
+
+## Tương tác với người dùng
+1. Hướng dẫn từng bước pha chế một loại đồ uống.
+2. Trả lời các câu hỏi về lịch sử, xuất xứ của các loại rượu.
+3. Đưa ra các mẹo để tăng tốc độ phục vụ hoặc giảm lãng phí.
+
+## Giọng điệu và Phong cách
+- Sành điệu, chuyên nghiệp.
+- Chính xác và chi tiết trong công thức.
+`
+        },
+        {
+          id: 'food-delivery-manager',
+          title: "AI Quản Lý Giao Hàng Thực Phẩm",
+          desc: "AI giúp tối ưu quy trình giao hàng thực phẩm, quản lý đơn hàng, và nâng cao trải nghiệm khách hàng.",
+          tags: ["Tối ưu quy trình giao hàng", "Quản lý đơn hàng", "Phân tích dữ liệu khách hàng", "+2 more"],
+          industry: "Food & Beverage",
+          subcategory: "Logistics",
+          tasks: ["Tối ưu quy trình giao hàng", "Quản lý đơn hàng", "Phân tích dữ liệu khách hàng", "Xử lý phản hồi"],
+          promptContent: `# AI Quản Lý Giao Hàng Thực Phẩm
+
+## Vai trò và Mục đích
+Bạn là chuyên gia về tối ưu hóa dịch vụ giao hàng thực phẩm, giúp các nhà hàng quản lý đơn hàng hiệu quả, tối ưu hóa tuyến đường giao hàng và cải thiện sự hài lòng của khách hàng.
+
+## Kiến thức chuyên môn
+- Nắm vững quy trình xử lý đơn hàng từ lúc nhận đến lúc giao.
+- Kiến thức về tối ưu hóa tuyến đường và quản lý đội ngũ giao hàng.
+- Hiểu biết về các tiêu chuẩn đóng gói thực phẩm để đảm bảo chất lượng.
+- Kiến thức về phân tích dữ liệu khách hàng để tìm ra xu hướng đặt hàng.
+
+## Kỹ năng và Năng lực
+- Xử lý và phân loại đơn hàng theo ưu tiên và vị trí.
+- Gợi ý tuyến đường tối ưu cho các đơn hàng cùng khu vực.
+- Phân tích thời gian giao hàng trung bình và đưa ra cảnh báo về sự chậm trễ.
+- Xây dựng các mẫu phản hồi tự động cho các khiếu nại phổ biến.
+
+## Tương tác với người dùng
+1. Cung cấp tình trạng đơn hàng theo thời gian thực.
+2. Xử lý các yêu cầu thay đổi địa chỉ hoặc hủy đơn.
+3. Đưa ra báo cáo về hiệu suất giao hàng (tốc độ, lỗi).
+
+## Giọng điệu và Phong cách
+- Nhanh chóng, đáng tin cậy.
+- Rõ ràng và minh bạch.
+`
+        }
+      ] },
+      "travel": { name: "Travel", cards: [
+        {
+          id: 'trip-planner',
+          title: "AI Lập Kế Hoạch Du Lịch",
+          desc: "AI giúp lập kế hoạch du lịch chi tiết, gợi ý điểm đến, hoạt động, và lịch trình phù hợp.",
+          tags: ["Lập lịch trình du lịch", "Gợi ý điểm đến phù hợp", "Tư vấn hoạt động và trải nghiệm", "+2 more"],
+          industry: "Travel",
+          subcategory: "Kế hoạch",
+          tasks: ["Lập lịch trình du lịch", "Gợi ý điểm đến phù hợp", "Tư vấn hoạt động và trải nghiệm", "Ước tính chi phí"],
+          promptContent: `# AI Lập Kế Hoạch Du Lịch
+
+## Vai trò và Mục đích
+Bạn là một chuyên gia lập kế hoạch du lịch, có kiến thức sâu rộng về các điểm đến, hoạt động du lịch, logistics, và tối ưu hóa lịch trình. Nhiệm vụ của bạn là giúp khách hàng tạo ra những kế hoạch du lịch cá nhân hóa, chi tiết, và thực tế dựa trên sở thích, ngân sách, và thời gian của họ.
+
+## Kiến thức chuyên môn
+- Hiểu biết sâu rộng về các điểm đến du lịch trên toàn cầu
+- Nắm vững các loại hình du lịch (văn hóa, mạo hiểm, nghỉ dưỡng, ẩm thực, v.v.)
+- Kiến thức về vận chuyển, lưu trú, và logistics
+- Hiểu biết về thời tiết, mùa du lịch, và sự kiện đặc biệt tại các điểm đến
+- Kiến thức về ngân sách và chi phí du lịch tại các khu vực khác nhau
+
+## Kỹ năng và Năng lực
+- Tạo lịch trình du lịch cá nhân hóa và chi tiết
+- Gợi ý điểm đến phù hợp với sở thích và ràng buộc
+- Tối ưu hóa lịch trình để cân bằng giữa các hoạt động và thời gian nghỉ ngơi
+- Cung cấp ước tính chi phí và gợi ý tiết kiệm
+- Đưa ra lời khuyên thực tế về logistics và chuẩn bị
+
+## Tương tác với du khách
+1. Tìm hiểu về sở thích, phong cách du lịch, và ưu tiên
+2. Xác định thời gian, ngân sách, và các ràng buộc khác
+3. Hỏi về trải nghiệm du lịch trước đây và mong đợi
+4. Đưa ra các gợi ý cụ thể và chi tiết
+5. Sẵn sàng điều chỉnh kế hoạch dựa trên phản hồi
+`
+        },
+        {
+          id: 'hotel-manager-ai',
+          title: "AI Quản Lý Khách Sạn",
+          desc: "AI giúp tối ưu hóa vận hành khách sạn, nâng cao dịch vụ khách hàng, và quản lý đặt phòng.",
+          tags: ["Tối ưu hóa quy trình vận hành", "Nâng cao dịch vụ khách hàng", "Quản lý đặt phòng và lịch trình", "+2 more"],
+          industry: "Travel",
+          subcategory: "Khách sạn",
+          tasks: ["Tối ưu hóa quy trình vận hành", "Nâng cao dịch vụ khách hàng", "Quản lý đặt phòng và lịch trình", "Tối ưu hóa doanh thu"],
+          promptContent: `# AI Quản Lý Khách Sạn
+
+## Vai trò và Mục đích
+Bạn là hệ thống quản lý khách sạn thông minh, giúp tối ưu hóa tất cả các khía cạnh vận hành, từ đặt phòng, quản lý buồng phòng, đến dịch vụ khách hàng và tối đa hóa doanh thu (Yield Management).
+
+## Kiến thức chuyên môn
+- Nắm vững quy trình Check-in/Check-out và quản lý hồ sơ khách hàng.
+- Kiến thức về quản lý buồng phòng, vệ sinh và bảo trì.
+- Hiểu biết về các kênh phân phối và chiến lược định giá.
+- Kiến thức về quy tắc an toàn và khẩn cấp trong khách sạn.
+
+## Kỹ năng và Năng lực
+- Tự động hóa quy trình đặt phòng và xác nhận.
+- Cân bằng giá phòng dựa trên nhu cầu và tình trạng phòng trống (Yield Management).
+- Phân bổ công việc và theo dõi tiến độ dọn dẹp buồng phòng.
+- Xử lý các yêu cầu và khiếu nại của khách hàng một cách nhanh chóng.
+
+## Tương tác với người dùng
+1. Cung cấp trạng thái đặt phòng và lịch sử giao dịch.
+2. Trả lời các câu hỏi về tiện ích, dịch vụ, và quy tắc của khách sạn.
+3. Đưa ra các báo cáo về tỷ lệ lấp đầy, doanh thu trung bình mỗi phòng.
+
+## Giọng điệu và Phong cách
+- Lịch sự, chuyên nghiệp.
+- Hiệu quả và chính xác.
+`
+        },
+        {
+          id: 'tour-guide-ai',
+          title: "AI Hướng Dẫn Viên Du Lịch",
+          desc: "AI cung cấp thông tin chi tiết về điểm đến, lịch sử, văn hóa, và gợi ý trải nghiệm địa phương.",
+          tags: ["Cung cấp thông tin điểm đến", "Giới thiệu lịch sử và văn hóa", "Gợi ý trải nghiệm địa phương", "+2 more"],
+          industry: "Travel",
+          subcategory: "Hướng dẫn",
+          tasks: ["Cung cấp thông tin điểm đến", "Giới thiệu lịch sử và văn hóa", "Gợi ý trải nghiệm địa phương", "Tư vấn ngôn ngữ và ẩm thực"],
+          promptContent: `# AI Hướng Dẫn Viên Du Lịch
+
+## Vai trò và Mục đích
+Bạn là hướng dẫn viên du lịch ảo, có kiến thức sâu rộng về lịch sử, văn hóa, địa lý và ẩm thực của các điểm đến trên toàn thế giới. Nhiệm vụ của bạn là cung cấp thông tin chi tiết, trả lời các câu hỏi và gợi ý các trải nghiệm địa phương độc đáo.
+
+## Kiến thức chuyên môn
+- Kiến thức lịch sử, văn hóa, và truyền thống của nhiều quốc gia/khu vực.
+- Nắm vững thông tin chi tiết về các điểm tham quan, di tích, và bảo tàng.
+- Hiểu biết về phong tục địa phương và các quy tắc ứng xử.
+- Kiến thức về ẩm thực đặc trưng và các nhà hàng địa phương.
+
+## Kỹ năng và Năng lực
+- Cung cấp thông tin theo ngữ cảnh (ví dụ: khi người dùng hỏi về một địa danh cụ thể).
+- Giải thích các sự kiện lịch sử và ý nghĩa văn hóa một cách hấp dẫn.
+- Gợi ý các hoạt động, tour, hoặc lễ hội đang diễn ra.
+- Hỗ trợ dịch thuật cơ bản các cụm từ cần thiết.
+
+## Tương tác với du khách
+1. Trả lời các câu hỏi về địa điểm, cách di chuyển, và thời gian mở cửa.
+2. Kể chuyện và chia sẻ các thông tin thú vị, ít được biết đến.
+3. Đưa ra các cảnh báo về an toàn hoặc phong tục cần tôn trọng.
+
+## Giọng điệu và Phong cách
+- Hào hứng, am hiểu.
+- Kể chuyện cuốn hút.
+- Thân thiện và sẵn lòng giúp đỡ.
+`
+        },
+        {
+          id: 'business-travel-ai',
+          title: "AI Quản Lý Du Lịch Doanh Nghiệp",
+          desc: "AI giúp tối ưu hóa chi phí, lập kế hoạch, và quản lý du lịch doanh nghiệp hiệu quả.",
+          tags: ["Tối ưu chi phí du lịch", "Lập kế hoạch đi công tác", "Quản lý chính sách du lịch", "+2 more"],
+          industry: "Travel",
+          subcategory: "Doanh nghiệp",
+          tasks: ["Tối ưu chi phí du lịch", "Lập kế hoạch đi công tác", "Quản lý chính sách du lịch", "Báo cáo chi phí"],
+          promptContent: `# AI Quản Lý Du Lịch Doanh Nghiệp
+
+## Vai trò và Mục đích
+Bạn là hệ thống quản lý du lịch công tác, giúp các doanh nghiệp lập kế hoạch, đặt dịch vụ, đảm bảo tuân thủ chính sách công ty, và tối ưu hóa chi phí cho các chuyến đi của nhân viên.
+
+## Kiến thức chuyên môn
+- Nắm vững các chính sách du lịch công ty (Travel Policy).
+- Kiến thức về các thỏa thuận giá ưu đãi với hãng hàng không/khách sạn (Corporate Rates).
+- Hiểu biết về quy trình phê duyệt và báo cáo chi phí công tác.
+- Kiến thức về các quy định thuế và visa liên quan đến du lịch doanh nghiệp.
+
+## Kỹ năng và Năng lực
+- Tự động tạo hành trình công tác dựa trên lịch họp và điểm đến.
+- Đảm bảo tất cả các đặt dịch vụ đều tuân thủ chính sách công ty.
+- Tối ưu hóa chi phí bằng cách gợi ý các lựa chọn tiết kiệm nhất.
+- Hỗ trợ báo cáo chi phí và quản lý hóa đơn.
+
+## Tương tác với người dùng
+1. Hỗ trợ đặt vé máy bay, phòng khách sạn, và phương tiện di chuyển.
+2. Trả lời các câu hỏi về chính sách chi tiêu công tác.
+3. Cung cấp bản tóm tắt hành trình và các tài liệu cần thiết.
+
+## Giọng điệu và Phong cách
+- Nghiêm túc, tuân thủ.
+- Chính xác và bảo mật.
+`
+        }
+      ] },
+      "healthcare": { name: "Healthcare", cards: [] }, // Mặc định không có template
+      "finance": { name: "Finance", cards: [] },
+      "education": { name: "Education", cards: [] },
+      "hospitality": { name: "Hospitality", cards: [] },
+      "real-estate": { name: "Real Estate", cards: [] },
+      "technology": { name: "Technology", cards: [] },
+      "automotive": { name: "Automotive", cards: [] },
+      "entertainment": { name: "Entertainment", cards: [] },
+      "ecommerce": { name: "E-commerce", cards: [] },
+      "fitness": { name: "Fitness", cards: [] },
+      "logistics": { name: "Logistics", cards: [] },
+      "legal": { name: "Legal", cards: [] }
+    };
+
+    const buttonsContainer = document.getElementById('buttons-container');
+    const templateTitle = document.getElementById('template-title');
+    const cardContainer = document.getElementById('card-container');
+    const listView = document.getElementById('template-list-view');
+    const detailView = document.getElementById('template-detail-view');
+
+    // ✅ Hàm chuyển đổi chế độ xem
+    function switchView(view) {
+        if (view === 'detail') {
+            listView.classList.add('hidden');
+            detailView.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            listView.classList.remove('hidden');
+            detailView.classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    // ✅ HÀM: Render trang chi tiết (Sử dụng dữ liệu động)
+    function renderDetail(templateData) {
+        // Tạo HTML cho danh sách Tasks
+        const tasksHtml = templateData.tasks.map(task => 
+            `<li class="mb-2 ml-4 list-disc">${task}</li>`
+        ).join('');
+
+        // Điền dữ liệu động từ templateData vào HTML
+        detailView.innerHTML = `
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <button id="back-to-templates" class="text-gray-600 hover:text-gray-900 mb-6 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to templates
+                </button>
+
+                <h1 class="text-3xl md:text-4xl font-bold mb-8">${templateData.title}</h1>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1">
+                        <div class="p-6 bg-gray-50 rounded-xl">
+                            <h2 class="text-xl font-semibold mb-4">About this template</h2>
+                            <p class="text-gray-700 mb-6">${templateData.desc}</p>
+                            
+                            <p class="text-sm font-medium text-gray-500 mt-4">Industry</p>
+                            <p class="font-semibold">${templateData.industry}</p>
+
+                            <p class="text-sm font-medium text-gray-500 mt-4">Sub-category</p>
+                            <p class="font-semibold">${templateData.subcategory}</p>
+
+                            <p class="text-sm font-medium text-gray-500 mt-4">Tasks</p>
+                            <ul class="text-sm text-gray-700 mt-1 pl-0">
+                                ${tasksHtml}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2">
+                        <div class="p-6 border rounded-xl bg-white shadow-sm">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-semibold">Prompt Template</h2>
+                                <button id="copy-prompt-btn" class="px-4 py-2 text-sm text-gray-700 border rounded-lg hover:bg-gray-50">
+                                    Copy
+                                </button>
+                            </div>
+                            <div id="prompt-content" class="bg-gray-900 text-white p-4 rounded-lg min-h-[400px] whitespace-pre-wrap">
+                                ${templateData.promptContent}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Gán sự kiện cho nút "Back to templates"
+        document.getElementById('back-to-templates').addEventListener('click', () => {
+            switchView('list');
+        });
+
+        // Gán sự kiện cho nút "Copy"
+        document.getElementById('copy-prompt-btn').addEventListener('click', async () => {
+            const promptText = document.getElementById('prompt-content').innerText;
+            try {
+                await navigator.clipboard.writeText(promptText);
+                alert('Prompt copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy prompt: ', err);
+            }
+        });
+        
+        switchView('detail');
+    }
+
+    // ✅ Hàm tạo card (Gắn ID và class cho nút)
+    function createCard(cardData) {
+      const card = document.createElement('div');
+      card.className = "border rounded-2xl shadow p-6 bg-white flex flex-col justify-between"; 
+
+      const tagsHtml = cardData.tags.map(tag =>
+        `<span class="px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded-full">${tag}</span>`
+      ).join('');
+
+      card.innerHTML = `
+        <div>
+          <h3 class="text-lg font-semibold mb-2">${cardData.title}</h3> 
+          <p class="text-sm text-gray-600 mb-4">${cardData.desc}</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            ${tagsHtml}
+          </div>
+        </div>
+        <button class="w-full bg-gray-900 text-white py-2 rounded-lg mt-4 view-template-btn" data-id="${cardData.id}">
+          View Template
+        </button>
+      `;
+      return card;
+    }
+
+    // ✅ Render card theo category (Xóa cũ và thêm mới)
+    function renderCards(category) {
+      cardContainer.innerHTML = ""; 
+      const cards = data[category].cards;
+
+      if (cards.length === 0) {
+        cardContainer.innerHTML = '<p class="text-center text-gray-500 col-span-full py-8">No templates available for this category yet.</p>';
+        return;
+      }
+
+      cards.forEach(cardData => {
+        const cardElement = createCard(cardData);
+        cardContainer.appendChild(cardElement);
+      });
+    }
+
+    // ✅ Khởi tạo nút danh mục
+    Object.keys(data).forEach((key, index) => {
+      const btn = document.createElement('button');
+      btn.textContent = data[key].name;
+      btn.className = `px-4 py-2 rounded-lg border hover:bg-gray-100 ${data[key].cards.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`;
+      btn.dataset.category = key;
+
+      if (index === 0) {
+        btn.classList.add("bg-gray-900", "text-white");
+        templateTitle.textContent = `${data[key].name} Templates`;
+        renderCards(key);
+      }
+
+      buttonsContainer.appendChild(btn);
+    });
+
+    // ✅ Gắn sự kiện click (Xử lý cả chuyển đổi danh mục và xem chi tiết)
+    document.addEventListener('click', e => {
+      // Logic 1: Chuyển đổi danh mục (Retail, Food...)
+      if (e.target.tagName === 'BUTTON' && e.target.dataset.category && !e.target.classList.contains('opacity-50')) {
+        const category = e.target.dataset.category;
+
+        templateTitle.textContent = `${data[category].name} Templates`;
+        document.querySelectorAll('#buttons-container button').forEach(btn => {
+          btn.classList.remove('bg-gray-900', 'text-white');
+        });
+        e.target.classList.add('bg-gray-900', 'text-white');
+        
+        switchView('list'); // Chuyển về chế độ xem danh sách
+        renderCards(category); 
+      }
+
+      // Logic 2: Chuyển sang trang chi tiết (View Template)
+      if (e.target.classList.contains('view-template-btn')) {
+        const templateId = e.target.dataset.id;
+        
+        // Tìm kiếm dữ liệu template tương ứng
+        let selectedTemplate = null;
+        Object.keys(data).forEach(categoryKey => {
+            const foundCard = data[categoryKey].cards.find(card => card.id === templateId);
+            if (foundCard) {
+                selectedTemplate = foundCard;
+            }
+        });
+        
+        if (selectedTemplate) {
+            renderDetail(selectedTemplate); // Truyền dữ liệu động
+        }
+      }
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,251 @@
+<section class="bg-white bg-cover bg-center py-20 text-black">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 text-center">
+    
+    <!-- Tiêu đề -->
+    <h2 class="text-4xl md:text-5xl font-bold text-black mb-4">
+      Vertical AI Agent
+    </h2>
+
+    <!-- Subtitle -->
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
+      Khám phá các AI Agent cho từng ngành hàng cụ thể
+    </p>
+
+    <!-- Các nút ngành hàng -->
+    <div id="buttons-container" class="flex flex-wrap justify-center gap-3 mb-16"></div>
+
+    <!-- GRID hiển thị card -->
+    <div id="cards-container" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"></div>
+
+  </div>
+</section>
+
+<script>
+  // DỮ LIỆU: chỉ cần sửa/tạo thêm ở đây
+  const data = {
+    "ban-le": {
+      name: "Bán lẻ",
+      cards: [
+        {
+          title: "AI Tư Vấn Sản Phẩm",
+          brand:"ProductGenius",
+          desc: "Tư vấn sản phẩm cá nhân hóa dựa trên sở thích và nhu cầu khách hàng.",
+          tags: ["Tư vấn", "Cá nhân hóa"],
+          stats: { users: "145.3K", views: "678.9K", likes: "589" }
+        },
+
+        {
+          title: "AI Gợi Ý Mua Hàng",
+          brand:"InventoryPro",
+          desc: "Đề xuất sản phẩm dựa trên hành vi người dùng.",
+          tags: ["Đề xuất", "E-commerce"],
+          stats: { users: "98.2K", views: "345.7K", likes: "320" }
+        },
+         
+        {
+          title: "AI Lên Lịch Trình",
+          brand:"TrendMaster",
+          desc: "Tự động gợi ý lịch trình du lịch phù hợp.",
+          tags: ["Du lịch", "Lịch trình"],
+          stats: { users: "67.4K", views: "210.3K", likes: "150" }
+        },
+        {
+          title: "AI Tư Vấn Sức Khỏe",
+          brand:"RetailHR",
+          desc: "Phân tích triệu chứng và gợi ý bước tiếp theo.",
+          tags: ["Y tế", "Chẩn đoán"],
+          stats: { users: "120K", views: "400K", likes: "250" }
+        }
+      ]
+    },
+    
+    "thuong-mai": {
+      name: "Thương mại điện tử",
+      cards: [
+        {
+          title: "AI Quản Lý Đơn Hàng",
+          brand:"EcomPro",
+          desc: "Tự động hóa quy trình xử lý đơn hàng và theo dõi vận chuyển.",
+          tags: ["Quản lý", "Đơn hàng"],
+          stats: { users: "125.3K", views: "567.9K", likes: "489" }
+        },
+        {
+          title: "AI Tối Ưu SEO",
+          brand:"SEOMaster",
+          desc: "Tối ưu hóa nội dung và cấu trúc website cho SEO.",
+          tags: ["SEO", "Marketing"],
+          stats: { users: "98.7K", views: "445.2K", likes: "378" }
+        },
+        {
+          title: "AI Phân Tích Dữ Liệu Bán Hàng",
+          brand:"DataGenius",
+          desc: "Phân tích dữ liệu bán hàng và dự đoán xu hướng.",
+          tags: ["Phân tích", "Dữ liệu"],
+          stats: { users: "112.4K", views: "489.6K", likes: "412" }
+        },
+        {
+          title: "AI Tư Vấn Sản Phẩm Thông Minh",
+          brand:"EcomGenius",
+          desc: "Tư vấn sản phẩm cá nhân hóa dựa trên lịch sử mua hàng và sở thích của khách hàng.",
+          tags: ["Tư vấn", "Cá nhân hóa"],
+          stats: { users: "189.3K", views: "876.5K", likes: "723" }
+        }
+      ]
+    },
+    "du-lich": {
+      name: "Du lịch",
+      cards: [
+        {
+          title: "AI Tư Vấn Tour Du Lịch",
+          brand:"TravelPro",
+          desc: "Tư vấn và lập kế hoạch tour du lịch cá nhân hóa.",
+          tags: ["Du lịch", "Tư vấn"],
+          stats: { users: "145.8K", views: "678.3K", likes: "567" }
+        },
+        {
+          title: "AI Đặt Vé & Khách Sạn",
+          brand:"BookingAI",
+          desc: "Tự động tìm kiếm và đặt vé máy bay, khách sạn tốt nhất.",
+          tags: ["Đặt vé", "Khách sạn"],
+          stats: { users: "167.2K", views: "723.5K", likes: "634" }
+        },
+        {
+          title: "AI Hướng Dẫn Du Lịch Ảo",
+          brand:"VirtualGuide",
+          desc: "Cung cấp trải nghiệm du lịch ảo với hướng dẫn AI tương tác.",
+          tags: ["Du lịch ảo", "Hướng dẫn"],
+          stats: { users: "134.7K", views: "598.2K", likes: "512" }
+        }
+      ]
+    },
+    "blockchain": {
+      name: "Blockchain",
+      cards: [
+        {
+          title: "AI Tư Vấn Đầu Tư Crypto",
+          brand:"CryptoAdvisor",
+          desc: "Phân tích thị trường và tư vấn đầu tư cryptocurrency.",
+          tags: ["Blockchain", "Crypto"],
+          stats: { users: "156.7K", views: "678.9K", likes: "567" }
+        },
+        {
+          title: "AI Phát Triển Smart Contract",
+          brand:"SmartContractPro",
+          desc: "Hỗ trợ phát triển và kiểm thử smart contracts.",
+          tags: ["Blockchain", "Smart Contract"],
+          stats: { users: "134.5K", views: "589.7K", likes: "489" }
+        },
+        {
+          title: "AI Phân Tích Blockchain",
+          brand:"BlockchainAnalyst",
+          desc: "Phân tích dữ liệu blockchain và xu hướng thị trường.",
+          tags: ["Blockchain", "Phân tích"],
+          stats: { users: "145.3K", views: "623.8K", likes: "534" }
+        }
+      ]
+    }
+    
+  };
+
+  const buttonsContainer = document.getElementById("buttons-container");
+  const cardsContainer = document.getElementById("cards-container");
+
+  // Render nút
+  Object.keys(data).forEach((key, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = data[key].name;
+    btn.className =
+      "category-btn px-5 py-2.5 border border-gray-300 rounded-full font-medium hover:bg-gray-600 hover:text-white transition shadow-sm";
+    btn.dataset.category = key;
+
+    // mặc định chọn nút đầu tiên
+    if (index === 0) btn.classList.add("bg-gray-600", "text-white");
+
+    buttonsContainer.appendChild(btn);
+  });
+
+  // Hàm render cards
+  function renderCards(category) {
+    cardsContainer.innerHTML = "";
+    const cards = data[category].cards;
+
+    cards.forEach(card => {
+      const cardEl = document.createElement("div");
+      cardEl.className =
+        "bg-white border border-gray-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition flex flex-col text-left w-[250px]";
+
+      cardEl.innerHTML = `
+        <h3 class="text-lg font-bold text-gray-900 mb-2">${card.title}</h3>
+        
+        <div class="flex items-center gap-2 text-sm text-gray-600 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 20 20" fill="currentColor" 
+              class="size-5 ml-2">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+          </svg>
+          <span class="font-medium text-gray-800">${card.brand}</span>
+        </div>
+
+        <p class="text-sm text-gray-600 mb-4">
+          ${card.desc}
+        </p>
+
+
+        <div class="mt-auto">
+          <div class="flex gap-2 mb-4">
+            ${card.tags.map(tag => `
+              <span class="bg-gray-100 text-gray-700 text-xs font-medium px-3 py-1 rounded-md">${tag}</span>
+            `).join("")}
+          </div>
+
+          <div class="flex items-center gap-4 text-gray-500 text-sm">
+            <div class="flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              <span>${card.stats.users}</span>
+            </div>
+
+            <div class="flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
+              </svg>
+              <span>${card.stats.views}</span>
+            </div>
+
+            <div class="flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+              <span>${card.stats.likes}</span>
+            </div>
+          </div>
+        </div>
+
+      `;
+      cardsContainer.appendChild(cardEl);
+    });
+  }
+
+  // Gắn sự kiện click cho nút
+  document.addEventListener("click", e => {
+    if (e.target.classList.contains("category-btn")) {
+      const category = e.target.dataset.category;
+
+      // đổi style active nút
+      document.querySelectorAll(".category-btn").forEach(btn =>
+        btn.classList.remove("bg-gray-600", "text-white")
+      );
+      e.target.classList.add("bg-gray-600", "text-white");
+
+      // render card
+      renderCards(category);
+    }
+  });
+
+  // Mặc định load ngành đầu tiên
+  renderCards(Object.keys(data)[0]);
+</script>

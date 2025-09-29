@@ -1,0 +1,32 @@
+---
+// Giữ nguyên các import cần thiết
+import BaseHead from "../components/BaseHead.astro";
+import Navigation from "../components/global/Navigation.astro";
+import Footer from "../components/global/Footer.astro"; // Giữ lại import này
+
+// Lưu ý: Nếu BaseLayout2.astro nằm ở vị trí khác, bạn có thể cần điều chỉnh đường dẫn import (ví dụ: ../../components/...)
+---
+<html
+  lang="en"
+  class="scroll-smooth selection:bg-accent-500 selection:text-white no-touchevents hydrated"
+>
+  <head>
+    <BaseHead />
+  </head>
+  <body class="bg-white flex flex-col min-h-svh">
+    <Navigation/>
+    <main class="grow"><slot /></main>
+    
+            <script>
+      window.oriagentChatbotConfig = {
+        token: '4Um3UkjFflTnMUuD',
+        baseUrl: 'https://app.oriagent.com'
+      };
+    </script>
+    <script
+      src="https://app.oriagent.com/embed.min.js"
+      id="4Um3UkjFflTnMUuD"
+      defer>
+    </script>
+  </body>
+</html>
